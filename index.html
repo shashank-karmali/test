@@ -66,16 +66,39 @@
       bottom: 0;
       right: 0;
     }
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      #maze {
+        width: 90%;
+        height: 90vw;
+      }
+
+      #player, #finish {
+        width: 10px;
+        height: 10px;
+      }
+
+      .button {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>The Prom Quest</h1>
-    <h4>Thinking to ask you from a few days but delay kr rhe the ab koi aur puch le usse phle hm puch lete h 😬</h4>
-    <h4>Hm smne se hi puchne ka soche the but I don't know thoda awkward lg rha tha ya syd fat rha tha.</h4>
+    <p>Thinking to ask you about this from last few days but delay kr rhe the ab koi aur puch le usse phle hm puch lete h 😬</p>
+    <p>Hm smne se hi puchne ka soche the but I don't know thoda awkward lg rha tha ya syd fat rha tha.</p>
+    <p>Aur aisa bilkul ni ki hm kisi aur se tumlog k wjh se ni puch rhe it's just hmko jiske sth maan h jane ka ussi se puchenge</p>
+    <p>So here I'm asking the girl with whom I want to go to prom</p>
     
-
-
 
     <div id="welcome-section">
       <button class="button" onclick="startGame()">Start the Game</button>
@@ -115,7 +138,7 @@
     <!-- Final Section -->
     <div id="final-section" class="hidden">
       <h2>Hello Miss Shivani, Congratulations you have made it to the end.<br>I would love if you would come to the prom with me.<br>
-          Will you be my prom date??? ❤️</h2>
+          So, Will you come with me to the prom??? ❤️</h2>
       <button class="button" onclick="showResponse('yes')">Yes!</button>
       <button class="button" onclick="showResponse('think')">Let me think...</button>
     </div>
