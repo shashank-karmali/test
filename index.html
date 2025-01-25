@@ -21,6 +21,29 @@
     .hidden {
       display: none;
     }
+    .controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.control-button {
+  width: 60px;
+  height: 60px;
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.control-button:hover {
+  background-color: #ff1493;
+}
+
 
     .button {
       background-color: #ff69b4;
@@ -126,14 +149,23 @@
 
     <!-- Maze Section -->
     <div id="maze-section" class="hidden">
-      <h2>Level 3: Maze</h2>
-      <h3>Help me to reach to you</h3>
-      <div id="maze">
-        <div id="player"></div>
-        <div id="finish"></div>
-      </div>
-      <p>Use arrow keys to move.</p>
+  <h2>Level 3: Maze</h2>
+  <h3>Help me to reach you</h3>
+  <div id="maze">
+    <div id="player"></div>
+    <div id="finish"></div>
+  </div>
+  <p>Use the buttons below to move.</p>
+  <div class="controls">
+    <button class="control-button" onclick="movePlayer('up')">⬆️</button>
+    <div>
+      <button class="control-button" onclick="movePlayer('left')">⬅️</button>
+      <button class="control-button" onclick="movePlayer('right')">➡️</button>
     </div>
+    <button class="control-button" onclick="movePlayer('down')">⬇️</button>
+  </div>
+</div>
+
 
     <!-- Final Section -->
     <div id="final-section" class="hidden">
@@ -255,6 +287,61 @@
       }
       document.getElementById('response-section').classList.remove('hidden');
     }
+    let startX = 0;
+let startY = 0;
+
+document.getElementById('maze').addEventListener('touchstart', (e) => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+});
+
+document.getElementById('maze').addEventListener('touchend', (e) => {
+  const endX = e.changedTouches[0].clientX;
+  const endY = e.changedTouches[0].clientY;
+  const diffX = endX - startX;
+  const diffY = endY - startY;
+
+  if (Math.abs(diffX) > Math.abs(diffY)) {
+    if (diffX > 0) movePlayer('right');
+    else movePlayer('left');
+  } else {
+    if (diffY > 0) movePlayer('down');
+    else movePlayer('up');
+  }
+});
+function movePlayer(direction) {
+  const player = document.getElementById('player');
+  let x = parseInt(player.style.left || 0);
+  let y = parseInt(player.style.top || 0);
+  const step = 20;
+
+  switch (direction) {
+    case 'up':
+      if (y > 0) y -= step;
+      break;
+    case 'down':
+      if (y < 280) y += step;
+      break;
+    case 'left':
+      if (x > 0) x -= step;
+      break;
+    case 'right':
+      if (x < 280) x += step;
+      break;
+  }
+
+  player.style.left = `${x}px`;
+  player.style.top = `${y}px`;
+
+  // Check if the player reached the finish
+  const finish = document.getElementById('finish');
+  if (x >= 280 && y >= 280) {
+    alert("You've reached the finish line! 🎉");
+    document.getElementById('maze-section').classList.add('hidden');
+    document.getElementById('final-section').classList.remove('hidden');
+  }
+}
+
   </script>
 </body>
 </html>
