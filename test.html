@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Prom Quest</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f8ff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .button {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .button:hover {
+      background-color: #ff1493;
+    }
+
+    .game-section {
+      margin-top: 20px;
+    }
+
+    #maze {
+      margin: 20px auto;
+      width: 300px;
+      height: 300px;
+      background-color: #fff;
+      border: 2px solid #000;
+      position: relative;
+    }
+
+    #player {
+      width: 20px;
+      height: 20px;
+      background-color: #f70d05;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #finish {
+      width: 20px;
+      height: 20px;
+      background-color: #32cd32;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>The Prom Quest</h1>
+    <h4>Thinking to ask you from a few days but delay kr rhe the ab koi aur puch le usse phle hm puch lete h 😬</h4>
+    <h4>Hm smne se hi puchne ka soche the but I don't know thoda awkward lg rha tha ya syd fat rha tha.</h4>
+    
+
+
+
+    <div id="welcome-section">
+      <button class="button" onclick="startGame()">Start the Game</button>
+    </div>
+
+    <!-- Memory Match Section -->
+    <div id="memory-section" class="hidden">
+      <h2>Level 1: Memory Match</h2>
+      <p>Match all pairs to move to the next level!</p>
+      <button class="button" onclick="completeLevel1()">Simulate Match</button>
+    </div>
+
+    <!-- Trivia Section -->
+    <div id="trivia-section" class="hidden">
+      <h2>Level 2: Trivia</h2>
+      <p>Answer the following questions correctly to proceed!</p>
+      <div id="question-container">
+        <p id="trivia-question">What’s Shivami's favorite coffee order?</p>
+        <button class="button" onclick="answerTrivia(0)">Black Coffee</button>
+        <button class="button" onclick="answerTrivia(1)">Latte</button>
+        <button class="button" onclick="answerTrivia(2)">Cappuccino</button>
+        <button class="button" onclick="answerTrivia(3)">Espresso</button>
+      </div>
+    </div>
+
+    <!-- Maze Section -->
+    <div id="maze-section" class="hidden">
+      <h2>Level 3: Maze</h2>
+      <h3>Help me to reach to you</h3>
+      <div id="maze">
+        <div id="player"></div>
+        <div id="finish"></div>
+      </div>
+      <p>Use arrow keys to move.</p>
+    </div>
+
+    <!-- Final Section -->
+    <div id="final-section" class="hidden">
+      <h2>Hello Miss Shivani, Congratulations you have made it to the end.<br>I would love if you would come to the prom with me.<br>
+          Will you be my prom date??? ❤️</h2>
+      <button class="button" onclick="showResponse('yes')">Yes!</button>
+      <button class="button" onclick="showResponse('think')">Let me think...</button>
+    </div>
+
+    <!-- Response Section -->
+    <div id="response-section" class="hidden">
+      <h2 id="response-message"></h2>
+    </div>
+  </div>
+
+  <script>
+    let currentLevel = 0;
+    let triviaIndex = 0;
+
+    const triviaQuestions = [
+      {
+        question: "First Day we met?",
+        options: ["21st June", "30th June", "5th July", "10th July"],
+        correct: 0
+      },
+      {
+        question: "What’s my favorite coffee order?",
+        options: ["Black Coffee", "Latte", "Cappuccino", "Espresso"],
+        correct: 3
+      },
+      {
+        question: "What’s Shivani's favorite movie genre?",
+        options: ["Action", "Romantic", "Comedy", "Thriller"],
+        correct: 1
+      },
+      {
+        question: "What’s Shivani's favorite food?",
+        options: ["Momos", "Rice-Daal-Chutney", "Pizza", "Noodels"],
+        correct: 1
+      },
+      {
+        question: "Which place would Shivani love to visit?",
+        options: ["Bali", "Japan", "Paris", "Pigauna"],
+        correct: 0
+      }
+    ];
+
+    function startGame() {
+      document.getElementById('welcome-section').classList.add('hidden');
+      document.getElementById('memory-section').classList.remove('hidden');
+      currentLevel = 1;
+    }
+
+    function completeLevel1() {
+      document.getElementById('memory-section').classList.add('hidden');
+      document.getElementById('trivia-section').classList.remove('hidden');
+      loadTriviaQuestion();
+      currentLevel = 2;
+    }
+
+    function loadTriviaQuestion() {
+      const question = triviaQuestions[triviaIndex];
+      document.getElementById('trivia-question').textContent = question.question;
+      const buttons = document.querySelectorAll('#trivia-section .button');
+      buttons.forEach((button, index) => {
+        button.textContent = question.options[index];
+        button.onclick = () => answerTrivia(index);
+      });
+    }
+
+    function answerTrivia(answer) {
+      const question = triviaQuestions[triviaIndex];
+      if (answer === question.correct) {
+        triviaIndex++;
+        if (triviaIndex < triviaQuestions.length) {
+          loadTriviaQuestion();
+        } else {
+          document.getElementById('trivia-section').classList.add('hidden');
+          document.getElementById('maze-section').classList.remove('hidden');
+          initializeMaze();
+          currentLevel = 3;
+        }
+      } else {
+        alert('Wrong answer! Try again.');
+      }
+    }
+
+    function initializeMaze() {
+      const player = document.getElementById('player');
+      const finish = document.getElementById('finish');
+      let x = 0, y = 0;
+
+      document.addEventListener('keydown', (e) => {
+        if (currentLevel === 3) {
+          const step = 20;
+          switch (e.key) {
+            case 'ArrowUp': if (y > 0) y -= step; break;
+            case 'ArrowDown': if (y < 280) y += step; break;
+            case 'ArrowLeft': if (x > 0) x -= step; break;
+            case 'ArrowRight': if (x < 280) x += step; break;
+          }
+          player.style.transform = `translate(${x}px, ${y}px)`;
+
+          if (x >= 280 && y >= 280) {
+            document.getElementById('maze-section').classList.add('hidden');
+            document.getElementById('final-section').classList.remove('hidden');
+          }
+        }
+      });
+    }
+
+    function showResponse(answer) {
+      document.getElementById('final-section').classList.add('hidden');
+      const responseMessage = document.getElementById('response-message');
+      if (answer === 'yes') {
+        responseMessage.textContent = 'Yay! I can’t wait to go with you! 🎉🫶🏼🫶🏼';
+      } else {
+        responseMessage.textContent = 'Take your time, but I hope it’s a yes! 😊';
+      }
+      document.getElementById('response-section').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
